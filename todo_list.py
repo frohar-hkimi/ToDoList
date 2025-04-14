@@ -11,9 +11,9 @@ class Task:
         return self.status
 
     def edit_task(self, new_name=None, new_due_date=None, new_status=None):
-        self.name = new_name if new_name is not None else self.name
-        self.due_date = new_due_date if new_due_date is not None else self.due_date
-        self.status = new_status if new_status is not None else self.status
+        self.name = new_name or self.name
+        self.due_date = new_due_date or self.due_date
+        self.status = new_status or self.status
 
         return f"Updated Task: {self.name} | Due: {self.due_date} | Status: {self.status}"
 
@@ -24,7 +24,7 @@ class ToDoList:
     def __init__(self, title="My To-Do List"):
         self.title = title
         self.tasks = []  # List of Task objects
-    
+                                                                                                                                                                                                  
     def add_task(self, task):
         if isinstance(task, Task):  # Ensure only Task objects are added
             if task not in self.tasks:
@@ -75,15 +75,42 @@ homework = Task('homework', '25/01/2024', 'Completed')
 # defining to do list class
 to_do_list = ToDoList()
 
-# performing actions
-print(to_do_list.add_task(laundry))
-print(to_do_list.add_task(washing_up))
-print(to_do_list.add_task(homework))
-print(to_do_list.get_tasks('Completed'))
-print(to_do_list.display_tasks())
+# # performing actions
+# print(to_do_list.add_task(laundry))
+# print(to_do_list.add_task(washing_up))
+# print(to_do_list.add_task(homework))
+# print(to_do_list.get_tasks('Completed'))
+# print(to_do_list.display_tasks())
 
 # this is some change i'd like to make
 
 # NEXT STEP CREATE UI, INPUT ECT TO PUT ALL OF IT TOGETHER
+
+def input_task_from_user(todo_list):
+    print("\n--- Add a New Task ---")
+    name = input("Task Name: ").strip()
+    due_date = input("Due Date (dd/mm/yyyy): ").strip()
+    status = input("Status (Pending/Completed) [default: Pending]: ").strip().capitalize()
+
+    if not name or not due_date:
+        print("Task name and due date are required.")
+        return
+
+    if status not in ['Pending', 'Completed']:
+        status = 'Pending'
+
+    task = Task(name, due_date, status)
+    print(todo_list.add_task(task))
+
+to_do_list = ToDoList()
+
+while True:
+    input_task_from_user(to_do_list)
+    cont = input("Add another task? (y/n): ").strip().lower()
+    if cont != 'y':
+        break
+
+print("\nYour To-Do List:")
+print(to_do_list.display_tasks())
 
 
